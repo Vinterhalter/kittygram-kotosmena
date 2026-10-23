@@ -1,0 +1,25 @@
+Проверка 23.10.2026: выключение и повторное включение Ubuntu VM.
+Оба варианта поднялись без ручного запуска приложения.
+
+До выключения:
+DOCKER_RECORDS 2 2
+SERVER_RECORDS 2 2
+
+После включения:
+active
+active
+active
+active
+NAME                  IMAGE                 COMMAND                  SERVICE   CREATED         STATUS                        PORTS
+kittygram-backend-1   kittygram-backend     "gunicorn config.wsg…"   backend   3 minutes ago   Up About a minute             8000/tcp
+kittygram-db-1        postgres:16-alpine    "docker-entrypoint.s…"   db        5 minutes ago   Up About a minute (healthy)   5432/tcp
+kittygram-migrate-1   kittygram-migrate     "sh -c 'python manag…"   migrate   3 minutes ago   Exited (0) 3 minutes ago      
+kittygram-nginx-1     nginx:stable-alpine   "/docker-entrypoint.…"   nginx     5 minutes ago   Up About a minute             0.0.0.0:8000->80/tcp, [::]:8000->80/tcp
+15 objects imported automatically (use -v 2 for details).
+
+DOCKER_RECORDS 2 2
+15 objects imported automatically (use -v 2 for details).
+
+SERVER_RECORDS 2 2
+
+Оба адреса /api/docs/ вернули HTTP 200. Данные сохранены.

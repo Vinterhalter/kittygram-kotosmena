@@ -1,0 +1,1039 @@
+{
+  "info": {
+    "name": "Kittygram Котосмена полный цикл",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Регистрация хозяина",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/users/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{owner_username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const suffix = Date.now().toString();",
+              "pm.collectionVariables.set('owner_username', 'owner_' + suffix);",
+              "pm.collectionVariables.set('sitter_username', 'sitter_' + suffix);",
+              "pm.collectionVariables.set('password', 'Demo-pass-' + suffix + '!');",
+              "const now = Date.now();",
+              "pm.collectionVariables.set('starts_at', new Date(now - 3600000).toISOString());",
+              "pm.collectionVariables.set('due_at', new Date(now + 3600000).toISOString());",
+              "pm.collectionVariables.set('ends_at', new Date(now + 86400000).toISOString());",
+              "pm.collectionVariables.set('extended_at', new Date(now + 172800000).toISOString());"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Регистрация помощника",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/users/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{sitter_username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Токен хозяина",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/token/login/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{owner_username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set('owner_token', pm.response.json()['auth_token']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Токен помощника",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/token/login/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{sitter_username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set('sitter_token', pm.response.json()['auth_token']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Текущий пользователь",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/users/me/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Создать кота",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/cats/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Марс\",\n  \"color\": \"ginger\",\n  \"birth_year\": 2021\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('cat_id', pm.response.json()['id']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Список котов",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/cats/?search=Марс"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Создать смену",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cat\": \"{{cat_id}}\",\n  \"sitter\": \"{{sitter_username}}\",\n  \"starts_at\": \"{{starts_at}}\",\n  \"ends_at\": \"{{ends_at}}\",\n  \"instructions\": \"Корм 50 г, вода, наблюдение.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('handover_id', pm.response.json()['id']);",
+              "pm.test('Новая смена ожидает принятия', () => pm.expect(pm.response.json().status).to.eql('draft'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Пересечение смен запрещено",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cat\": \"{{cat_id}}\",\n  \"sitter\": \"{{sitter_username}}\",\n  \"starts_at\": \"{{starts_at}}\",\n  \"ends_at\": \"{{ends_at}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Создать задачу",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/tasks/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"handover\": \"{{handover_id}}\",\n  \"title\": \"Покормить кота\",\n  \"instructions\": \"50 г сухого корма, заменить воду.\",\n  \"due_at\": \"{{due_at}}\",\n  \"required\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('task_id', pm.response.json()['id']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Принятие хозяином запрещено",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/accept/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Принять смену помощником",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/accept/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Смена активна', () => pm.expect(pm.response.json().status).to.eql('active'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Изменение активного плана запрещено",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/tasks/{{task_id}}/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Другой план\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 Отправить результат",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/completions/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"task\": \"{{task_id}}\",\n  \"note\": \"Заменил корм и воду.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('completion_id', pm.response.json()['id']);",
+              "pm.test('Результат ожидает проверки', () => pm.expect(pm.response.json().status).to.eql('pending'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 Повторная отправка запрещена",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/completions/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"task\": \"{{task_id}}\",\n  \"note\": \"Дубликат\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+              "pm.test('Отказ связан с текущим результатом', () => pm.expect(pm.response.json()).to.have.property('task'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 Вернуть на доработку",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/completions/{{completion_id}}/review/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"rejected\",\n  \"note\": \"Укажите количество корма.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Сохранены возврат и причина', () => { const r=pm.response.json(); pm.expect(r.status).to.eql('rejected'); pm.expect(r.review_note).to.not.eql(''); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 Исправленный результат",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/completions/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"task\": \"{{task_id}}\",\n  \"note\": \"Насыпал 50 г корма, миска воды полная.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('completion_id', pm.response.json()['id']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 Принять результат",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/completions/{{completion_id}}/review/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"approved\",\n  \"note\": \"Принято.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Результат принят', () => pm.expect(pm.response.json().status).to.eql('approved'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 Сообщить об инциденте",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/incidents/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"handover\": \"{{handover_id}}\",\n  \"severity\": \"urgent\",\n  \"description\": \"Заканчивается запас корма.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('incident_id', pm.response.json()['id']);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 Нельзя закрыть нерешённый инцидент",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/close/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 Решить инцидент",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/incidents/{{incident_id}}/resolve/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resolution\": \"Доставлен новый пакет корма.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Решение сохранено', () => { const r=pm.response.json(); pm.expect(r.resolved_at).to.not.eql(null); pm.expect(r.resolution).to.not.eql(''); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 Продлить смену",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/extend/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ends_at\": \"{{extended_at}}\",\n  \"reason\": \"Возвращаюсь на день позже.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 Отчёт перед закрытием",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/report/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Условия закрытия выполнены', () => {const r=pm.response.json(); pm.expect(r.can_close).to.eql(true); pm.expect(r.unresolved_incidents).to.eql(0); pm.expect(r.approved_required).to.eql(r.required_total);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24 Закрыть смену",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/close/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Смена закрыта', () => pm.expect(pm.response.json().status).to.eql('closed'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25 Журнал событий",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/events/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26 Фильтр и пагинация",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{sitter_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/?status=closed&page=1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('Есть страницы, все смены закрыты', () => {const r=pm.response.json(); pm.expect(r).to.have.all.keys('count','next','previous','results'); r.results.forEach(h=>pm.expect(h.status).to.eql('closed'));});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27 Просроченные задачи",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/tasks/overdue/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28 Запрос без токена",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/handovers/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29 Несуществующая смена",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/999999/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30 Прямая смена статуса запрещена",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{owner_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/handovers/{{handover_id}}/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"active\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 405', () => pm.response.to.have.status(405));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31 OpenAPI схема",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/schema/?format=json"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32 Swagger UI",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/docs/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33 ReDoc",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/redoc/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

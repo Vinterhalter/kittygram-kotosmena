@@ -1,0 +1,8 @@
+{
+  "name": "kotosmena-api-checks",
+  "private": true,
+  "scripts": {
+    "test": "newman run Котосмена.postman_collection.json --reporters cli,json --reporter-json-export ../docs/newman-raw.json"
+  },
+  "devDependencies": {"newman": "4.6.1"}
+}

@@ -1,0 +1,456 @@
+{
+  "tool": "Newman",
+  "source": "Postman collection v2.1",
+  "base_url": "http://127.0.0.1:8000",
+  "stats": {
+    "requests": {
+      "total": 33,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 43,
+      "pending": 0,
+      "failed": 0
+    }
+  },
+  "steps": [
+    {
+      "name": "01 Регистрация хозяина",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 104,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "02 Регистрация помощника",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 92,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "03 Токен хозяина",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 94,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "04 Токен помощника",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 94,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "05 Текущий пользователь",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 7,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "06 Создать кота",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "07 Список котов",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "08 Создать смену",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        },
+        {
+          "name": "Новая смена ожидает принятия",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "09 Пересечение смен запрещено",
+      "method": "POST",
+      "status": 400,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "10 Создать задачу",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "11 Принятие хозяином запрещено",
+      "method": "POST",
+      "status": 403,
+      "duration_ms": 6,
+      "tests": [
+        {
+          "name": "HTTP 403",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "12 Принять смену помощником",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Смена активна",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "13 Изменение активного плана запрещено",
+      "method": "PATCH",
+      "status": 400,
+      "duration_ms": 7,
+      "tests": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "14 Отправить результат",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        },
+        {
+          "name": "Результат ожидает проверки",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "15 Повторная отправка запрещена",
+      "method": "POST",
+      "status": 400,
+      "duration_ms": 7,
+      "tests": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Отказ связан с текущим результатом",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "16 Вернуть на доработку",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 10,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Сохранены возврат и причина",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "17 Исправленный результат",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "18 Принять результат",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Результат принят",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "19 Сообщить об инциденте",
+      "method": "POST",
+      "status": 201,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "20 Нельзя закрыть нерешённый инцидент",
+      "method": "POST",
+      "status": 400,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "21 Решить инцидент",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Решение сохранено",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "22 Продлить смену",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 10,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "23 Отчёт перед закрытием",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 10,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Условия закрытия выполнены",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "24 Закрыть смену",
+      "method": "POST",
+      "status": 200,
+      "duration_ms": 11,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Смена закрыта",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "25 Журнал событий",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "26 Фильтр и пагинация",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 9,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Есть страницы, все смены закрыты",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "27 Просроченные задачи",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 11,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "28 Запрос без токена",
+      "method": "GET",
+      "status": 401,
+      "duration_ms": 2,
+      "tests": [
+        {
+          "name": "HTTP 401",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "29 Несуществующая смена",
+      "method": "GET",
+      "status": 404,
+      "duration_ms": 8,
+      "tests": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "30 Прямая смена статуса запрещена",
+      "method": "PATCH",
+      "status": 405,
+      "duration_ms": 6,
+      "tests": [
+        {
+          "name": "HTTP 405",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "31 OpenAPI схема",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 28,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "32 Swagger UI",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 3,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "33 ReDoc",
+      "method": "GET",
+      "status": 200,
+      "duration_ms": 6,
+      "tests": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "failures": 0
+}

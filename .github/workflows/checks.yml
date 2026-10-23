@@ -1,0 +1,31 @@
+name: Project checks
+on: [push, pull_request]
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-only-key-which-is-not-used-in-production-0123456789
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: kittygram
+      POSTGRES_USER: kittygram
+      POSTGRES_PASSWORD: ci-only-password
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: kittygram
+          POSTGRES_USER: kittygram
+          POSTGRES_PASSWORD: ci-only-password
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+      - run: python backend/manage.py check
+      - run: python backend/manage.py makemigrations --check --dry-run
+      - run: python backend/manage.py test care cats --verbosity 2
+      - run: python backend/manage.py spectacular --file /tmp/schema.yaml --validate --fail-on-warn
+      - run: docker compose --env-file .env.example config --quiet

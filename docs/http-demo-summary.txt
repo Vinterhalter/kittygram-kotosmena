@@ -1,0 +1,34 @@
+201 POST  /api/users/ — Регистрация хозяина
+201 POST  /api/users/ — Регистрация помощника
+200 POST  /api/token/login/ — Токен хозяина
+200 POST  /api/token/login/ — Токен помощника
+200 GET   /api/users/me/ — Текущий пользователь
+201 POST  /api/cats/ — Создать кота
+200 GET   /api/cats/?search=Марс — Список котов
+201 POST  /api/handovers/ — Создать смену
+400 POST  /api/handovers/ — Пересечение смен запрещено
+201 POST  /api/tasks/ — Создать задачу
+403 POST  /api/handovers/1/accept/ — Принятие хозяином запрещено
+200 POST  /api/handovers/1/accept/ — Принять смену помощником
+400 PATCH /api/tasks/1/ — Изменение активного плана запрещено
+201 POST  /api/completions/ — Отправить результат
+400 POST  /api/completions/ — Повторная отправка запрещена
+200 POST  /api/completions/1/review/ — Вернуть на доработку
+201 POST  /api/completions/ — Исправленный результат
+200 POST  /api/completions/2/review/ — Принять результат
+201 POST  /api/incidents/ — Сообщить об инциденте
+400 POST  /api/handovers/1/close/ — Нельзя закрыть нерешённый инцидент
+200 POST  /api/incidents/1/resolve/ — Решить инцидент
+200 POST  /api/handovers/1/extend/ — Продлить смену
+200 GET   /api/handovers/1/report/ — Отчёт перед закрытием
+200 POST  /api/handovers/1/close/ — Закрыть смену
+200 GET   /api/handovers/1/events/ — Журнал событий
+200 GET   /api/handovers/?status=closed&page=1 — Фильтр и пагинация
+200 GET   /api/tasks/overdue/ — Просроченные задачи
+401 GET   /api/handovers/ — Запрос без токена
+404 GET   /api/handovers/999999/ — Несуществующая смена
+405 PATCH /api/handovers/1/ — Прямая смена статуса запрещена
+200 GET   /api/schema/?format=json — OpenAPI схема
+200 GET   /api/docs/ — Swagger UI
+200 GET   /api/redoc/ — ReDoc
+PASS 33/33

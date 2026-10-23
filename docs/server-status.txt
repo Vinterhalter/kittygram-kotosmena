@@ -1,0 +1,27 @@
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+Python 3.14.4
+psql (PostgreSQL) 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+nginx version: nginx/1.28.3 (Ubuntu)
+Id=kittygram.service
+ActiveState=active
+SubState=running
+UnitFileState=enabled
+ExecMainStatus=0
+
+Id=nginx.service
+ActiveState=active
+SubState=running
+UnitFileState=enabled
+ExecMainStatus=0
+
+Id=postgresql.service
+ActiveState=active
+SubState=exited
+UnitFileState=enabled
+ExecMainStatus=0
+Swagger HTTP 200
+Interface HTTP 200
+CSS HTTP 200

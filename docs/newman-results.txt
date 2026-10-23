@@ -1,0 +1,165 @@
+newman
+
+Kittygram Котосмена полный цикл
+
+→ 01 Регистрация хозяина
+  POST http://127.0.0.1:8000/api/users/ [201 Created, 382B, 104ms]
+  ✓  HTTP 201
+
+→ 02 Регистрация помощника
+  POST http://127.0.0.1:8000/api/users/ [201 Created, 383B, 92ms]
+  ✓  HTTP 201
+
+→ 03 Токен хозяина
+  POST http://127.0.0.1:8000/api/token/login/ [200 OK, 382B, 94ms]
+  ✓  HTTP 200
+
+→ 04 Токен помощника
+  POST http://127.0.0.1:8000/api/token/login/ [200 OK, 382B, 94ms]
+  ✓  HTTP 200
+
+→ 05 Текущий пользователь
+  GET http://127.0.0.1:8000/api/users/me/ [200 OK, 374B, 7ms]
+  ✓  HTTP 200
+
+→ 06 Создать кота
+  POST http://127.0.0.1:8000/api/cats/ [201 Created, 436B, 9ms]
+  ✓  HTTP 201
+
+→ 07 Список котов
+  GET http://127.0.0.1:8000/api/cats/?search=Марс [200 OK, 586B, 9ms]
+  ✓  HTTP 200
+
+→ 08 Создать смену
+  POST http://127.0.0.1:8000/api/handovers/ [201 Created, 614B, 8ms]
+  ✓  HTTP 201
+  ✓  Новая смена ожидает принятия
+
+→ 09 Пересечение смен запрещено
+  POST http://127.0.0.1:8000/api/handovers/ [400 Bad Request, 441B, 8ms]
+  ✓  HTTP 400
+
+→ 10 Создать задачу
+  POST http://127.0.0.1:8000/api/tasks/ [201 Created, 551B, 8ms]
+  ✓  HTTP 201
+
+→ 11 Принятие хозяином запрещено
+  POST http://127.0.0.1:8000/api/handovers/2/accept/ [403 Forbidden, 407B, 6ms]
+  ✓  HTTP 403
+
+→ 12 Принять смену помощником
+  POST http://127.0.0.1:8000/api/handovers/2/accept/ [200 OK, 599B, 8ms]
+  ✓  HTTP 200
+  ✓  Смена активна
+
+→ 13 Изменение активного плана запрещено
+  PATCH http://127.0.0.1:8000/api/tasks/2/ [400 Bad Request, 408B, 7ms]
+  ✓  HTTP 400
+
+→ 14 Отправить результат
+  POST http://127.0.0.1:8000/api/completions/ [201 Created, 531B, 9ms]
+  ✓  HTTP 201
+  ✓  Результат ожидает проверки
+
+→ 15 Повторная отправка запрещена
+  POST http://127.0.0.1:8000/api/completions/ [400 Bad Request, 465B, 7ms]
+  ✓  HTTP 400
+  ✓  Отказ связан с текущим результатом
+
+→ 16 Вернуть на доработку
+  POST http://127.0.0.1:8000/api/completions/3/review/ [200 OK, 593B, 10ms]
+  ✓  HTTP 200
+  ✓  Сохранены возврат и причина
+
+→ 17 Исправленный результат
+  POST http://127.0.0.1:8000/api/completions/ [201 Created, 561B, 9ms]
+  ✓  HTTP 201
+
+→ 18 Принять результат
+  POST http://127.0.0.1:8000/api/completions/4/review/ [200 OK, 591B, 9ms]
+  ✓  HTTP 200
+  ✓  Результат принят
+
+→ 19 Сообщить об инциденте
+  POST http://127.0.0.1:8000/api/incidents/ [201 Created, 535B, 8ms]
+  ✓  HTTP 201
+
+→ 20 Нельзя закрыть нерешённый инцидент
+  POST http://127.0.0.1:8000/api/handovers/2/close/ [400 Bad Request, 444B, 9ms]
+  ✓  HTTP 400
+
+→ 21 Решить инцидент
+  POST http://127.0.0.1:8000/api/incidents/2/resolve/ [200 OK, 601B, 9ms]
+  ✓  HTTP 200
+  ✓  Решение сохранено
+
+→ 22 Продлить смену
+  POST http://127.0.0.1:8000/api/handovers/2/extend/ [200 OK, 599B, 10ms]
+  ✓  HTTP 200
+
+→ 23 Отчёт перед закрытием
+  GET http://127.0.0.1:8000/api/handovers/2/report/ [200 OK, 486B, 10ms]
+  ✓  HTTP 200
+  ✓  Условия закрытия выполнены
+
+→ 24 Закрыть смену
+  POST http://127.0.0.1:8000/api/handovers/2/close/ [200 OK, 599B, 11ms]
+  ✓  HTTP 200
+  ✓  Смена закрыта
+
+→ 25 Журнал событий
+  GET http://127.0.0.1:8000/api/handovers/2/events/ [200 OK, 1.69KB, 9ms]
+  ✓  HTTP 200
+
+→ 26 Фильтр и пагинация
+  GET http://127.0.0.1:8000/api/handovers/?status=closed&page=1 [200 OK, 662B, 9ms]
+  ✓  HTTP 200
+  ✓  Есть страницы, все смены закрыты
+
+→ 27 Просроченные задачи
+  GET http://127.0.0.1:8000/api/tasks/overdue/ [200 OK, 374B, 11ms]
+  ✓  HTTP 200
+
+→ 28 Запрос без токена
+  GET http://127.0.0.1:8000/api/handovers/ [401 Unauthorized, 453B, 2ms]
+  ✓  HTTP 401
+
+→ 29 Несуществующая смена
+  GET http://127.0.0.1:8000/api/handovers/999999/ [404 Not Found, 378B, 8ms]
+  ✓  HTTP 404
+
+→ 30 Прямая смена статуса запрещена
+  PATCH http://127.0.0.1:8000/api/handovers/2/ [405 Method Not Allowed, 394B, 6ms]
+  ✓  HTTP 405
+
+→ 31 OpenAPI схема
+  GET http://127.0.0.1:8000/api/schema/?format=json [200 OK, 106.4KB, 28ms]
+  ✓  HTTP 200
+
+→ 32 Swagger UI
+  GET http://127.0.0.1:8000/api/docs/ [200 OK, 5.01KB, 3ms]
+  ✓  HTTP 200
+
+→ 33 ReDoc
+  GET http://127.0.0.1:8000/api/redoc/ [200 OK, 1.05KB, 6ms]
+  ✓  HTTP 200
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                33 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                33 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                43 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 935ms                                      │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 117.15KB (approx)                         │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 19ms [min: 2ms, max: 104ms, s.d.: 28ms] │
+└────────────────────────────────────────────────────────────────┘

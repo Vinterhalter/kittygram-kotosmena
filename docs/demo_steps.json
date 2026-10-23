@@ -1,0 +1,384 @@
+[
+  {
+    "name": "Регистрация хозяина",
+    "method": "POST",
+    "path": "/api/users/",
+    "data": {
+      "username": "{{owner_username}}",
+      "password": "{{password}}"
+    },
+    "role": null,
+    "code": 201,
+    "save": null
+  },
+  {
+    "name": "Регистрация помощника",
+    "method": "POST",
+    "path": "/api/users/",
+    "data": {
+      "username": "{{sitter_username}}",
+      "password": "{{password}}"
+    },
+    "role": null,
+    "code": 201,
+    "save": null
+  },
+  {
+    "name": "Токен хозяина",
+    "method": "POST",
+    "path": "/api/token/login/",
+    "data": {
+      "username": "{{owner_username}}",
+      "password": "{{password}}"
+    },
+    "role": null,
+    "code": 200,
+    "save": [
+      "owner_token",
+      "auth_token"
+    ]
+  },
+  {
+    "name": "Токен помощника",
+    "method": "POST",
+    "path": "/api/token/login/",
+    "data": {
+      "username": "{{sitter_username}}",
+      "password": "{{password}}"
+    },
+    "role": null,
+    "code": 200,
+    "save": [
+      "sitter_token",
+      "auth_token"
+    ]
+  },
+  {
+    "name": "Текущий пользователь",
+    "method": "GET",
+    "path": "/api/users/me/",
+    "data": null,
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Создать кота",
+    "method": "POST",
+    "path": "/api/cats/",
+    "data": {
+      "name": "Марс",
+      "color": "ginger",
+      "birth_year": 2021
+    },
+    "role": "owner",
+    "code": 201,
+    "save": [
+      "cat_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Список котов",
+    "method": "GET",
+    "path": "/api/cats/?search=Марс",
+    "data": "",
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Создать смену",
+    "method": "POST",
+    "path": "/api/handovers/",
+    "data": {
+      "cat": "{{cat_id}}",
+      "sitter": "{{sitter_username}}",
+      "starts_at": "{{starts_at}}",
+      "ends_at": "{{ends_at}}",
+      "instructions": "Корм 50 г, вода, наблюдение."
+    },
+    "role": "owner",
+    "code": 201,
+    "save": [
+      "handover_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Пересечение смен запрещено",
+    "method": "POST",
+    "path": "/api/handovers/",
+    "data": {
+      "cat": "{{cat_id}}",
+      "sitter": "{{sitter_username}}",
+      "starts_at": "{{starts_at}}",
+      "ends_at": "{{ends_at}}"
+    },
+    "role": "owner",
+    "code": 400,
+    "save": null
+  },
+  {
+    "name": "Создать задачу",
+    "method": "POST",
+    "path": "/api/tasks/",
+    "data": {
+      "handover": "{{handover_id}}",
+      "title": "Покормить кота",
+      "instructions": "50 г сухого корма, заменить воду.",
+      "due_at": "{{due_at}}",
+      "required": true
+    },
+    "role": "owner",
+    "code": 201,
+    "save": [
+      "task_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Принятие хозяином запрещено",
+    "method": "POST",
+    "path": "/api/handovers/{{handover_id}}/accept/",
+    "data": {},
+    "role": "owner",
+    "code": 403,
+    "save": null
+  },
+  {
+    "name": "Принять смену помощником",
+    "method": "POST",
+    "path": "/api/handovers/{{handover_id}}/accept/",
+    "data": {},
+    "role": "sitter",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Изменение активного плана запрещено",
+    "method": "PATCH",
+    "path": "/api/tasks/{{task_id}}/",
+    "data": {
+      "title": "Другой план"
+    },
+    "role": "owner",
+    "code": 400,
+    "save": null
+  },
+  {
+    "name": "Отправить результат",
+    "method": "POST",
+    "path": "/api/completions/",
+    "data": {
+      "task": "{{task_id}}",
+      "note": "Заменил корм и воду."
+    },
+    "role": "sitter",
+    "code": 201,
+    "save": [
+      "completion_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Повторная отправка запрещена",
+    "method": "POST",
+    "path": "/api/completions/",
+    "data": {
+      "task": "{{task_id}}",
+      "note": "Дубликат"
+    },
+    "role": "sitter",
+    "code": 400,
+    "save": null
+  },
+  {
+    "name": "Вернуть на доработку",
+    "method": "POST",
+    "path": "/api/completions/{{completion_id}}/review/",
+    "data": {
+      "decision": "rejected",
+      "note": "Укажите количество корма."
+    },
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Исправленный результат",
+    "method": "POST",
+    "path": "/api/completions/",
+    "data": {
+      "task": "{{task_id}}",
+      "note": "Насыпал 50 г корма, миска воды полная."
+    },
+    "role": "sitter",
+    "code": 201,
+    "save": [
+      "completion_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Принять результат",
+    "method": "POST",
+    "path": "/api/completions/{{completion_id}}/review/",
+    "data": {
+      "decision": "approved",
+      "note": "Принято."
+    },
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Сообщить об инциденте",
+    "method": "POST",
+    "path": "/api/incidents/",
+    "data": {
+      "handover": "{{handover_id}}",
+      "severity": "urgent",
+      "description": "Заканчивается запас корма."
+    },
+    "role": "sitter",
+    "code": 201,
+    "save": [
+      "incident_id",
+      "id"
+    ]
+  },
+  {
+    "name": "Нельзя закрыть нерешённый инцидент",
+    "method": "POST",
+    "path": "/api/handovers/{{handover_id}}/close/",
+    "data": {},
+    "role": "owner",
+    "code": 400,
+    "save": null
+  },
+  {
+    "name": "Решить инцидент",
+    "method": "POST",
+    "path": "/api/incidents/{{incident_id}}/resolve/",
+    "data": {
+      "resolution": "Доставлен новый пакет корма."
+    },
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Продлить смену",
+    "method": "POST",
+    "path": "/api/handovers/{{handover_id}}/extend/",
+    "data": {
+      "ends_at": "{{extended_at}}",
+      "reason": "Возвращаюсь на день позже."
+    },
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Отчёт перед закрытием",
+    "method": "GET",
+    "path": "/api/handovers/{{handover_id}}/report/",
+    "data": null,
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Закрыть смену",
+    "method": "POST",
+    "path": "/api/handovers/{{handover_id}}/close/",
+    "data": {},
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Журнал событий",
+    "method": "GET",
+    "path": "/api/handovers/{{handover_id}}/events/",
+    "data": null,
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Фильтр и пагинация",
+    "method": "GET",
+    "path": "/api/handovers/?status=closed&page=1",
+    "data": null,
+    "role": "sitter",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Просроченные задачи",
+    "method": "GET",
+    "path": "/api/tasks/overdue/",
+    "data": null,
+    "role": "owner",
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Запрос без токена",
+    "method": "GET",
+    "path": "/api/handovers/",
+    "data": null,
+    "role": null,
+    "code": 401,
+    "save": null
+  },
+  {
+    "name": "Несуществующая смена",
+    "method": "GET",
+    "path": "/api/handovers/999999/",
+    "data": null,
+    "role": "owner",
+    "code": 404,
+    "save": null
+  },
+  {
+    "name": "Прямая смена статуса запрещена",
+    "method": "PATCH",
+    "path": "/api/handovers/{{handover_id}}/",
+    "data": {
+      "status": "active"
+    },
+    "role": "owner",
+    "code": 405,
+    "save": null
+  },
+  {
+    "name": "OpenAPI схема",
+    "method": "GET",
+    "path": "/api/schema/?format=json",
+    "data": null,
+    "role": null,
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "Swagger UI",
+    "method": "GET",
+    "path": "/api/docs/",
+    "data": null,
+    "role": null,
+    "code": 200,
+    "save": null
+  },
+  {
+    "name": "ReDoc",
+    "method": "GET",
+    "path": "/api/redoc/",
+    "data": null,
+    "role": null,
+    "code": 200,
+    "save": null
+  }
+]

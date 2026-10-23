@@ -1,0 +1,81 @@
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 40 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: django_filters, djoser, drf_spectacular, messages, rest_framework, staticfiles, web
+  Apply all migrations: admin, auth, authtoken, care, cats, contenttypes, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying authtoken.0001_initial... OK
+  Applying authtoken.0002_auto_20160226_1747... OK
+  Applying authtoken.0003_tokenproxy... OK
+  Applying authtoken.0004_alter_tokenproxy_options... OK
+  Applying cats.0001_initial... OK
+  Applying care.0001_initial... OK
+  Applying care.0002_alter_handover_status... OK
+  Applying sessions.0001_initial...test_accept_requires_required_task (care.tests.CareFlowTests.test_accept_requires_required_task) ... ok
+test_active_plan_immutable (care.tests.CareFlowTests.test_active_plan_immutable) ... ok
+test_adjacent_period (care.tests.CareFlowTests.test_adjacent_period) ... ok
+test_cancel_requires_reason (care.tests.CareFlowTests.test_cancel_requires_reason) ... ok
+test_cats_owner_permissions_and_year (care.tests.CareFlowTests.test_cats_owner_permissions_and_year) ... ok
+test_close_unapproved_tasks (care.tests.CareFlowTests.test_close_unapproved_tasks) ... ok
+test_closed_shift_cannot_extend (care.tests.CareFlowTests.test_closed_shift_cannot_extend) ... ok
+test_complete_outside_period (care.tests.CareFlowTests.test_complete_outside_period) ... ok
+test_double_review (care.tests.CareFlowTests.test_double_review) ... ok
+test_duplicate_submission (care.tests.CareFlowTests.test_duplicate_submission) ... ok
+test_event_log_read_only (care.tests.CareFlowTests.test_event_log_read_only) ... ok
+test_expired_accept (care.tests.CareFlowTests.test_expired_accept) ... ok
+test_extend_and_resume_expired_shift (care.tests.CareFlowTests.test_extend_and_resume_expired_shift) ... ok
+test_extend_overlap_rejected (care.tests.CareFlowTests.test_extend_overlap_rejected) ... ok
+test_foreign_cat (care.tests.CareFlowTests.test_foreign_cat) ... ok
+test_full_flow_with_rework_and_incident (care.tests.CareFlowTests.test_full_flow_with_rework_and_incident) ... ok
+test_guest_unauthorized (care.tests.CareFlowTests.test_guest_unauthorized) ... ok
+test_invalid_dates (care.tests.CareFlowTests.test_invalid_dates) ... ok
+test_no_direct_state_patch (care.tests.CareFlowTests.test_no_direct_state_patch) ... ok
+test_overdue_and_filter (care.tests.CareFlowTests.test_overdue_and_filter) ... ok
+test_overlap (care.tests.CareFlowTests.test_overlap) ... ok
+test_owner_cannot_accept (care.tests.CareFlowTests.test_owner_cannot_accept) ... ok
+test_owner_cannot_complete (care.tests.CareFlowTests.test_owner_cannot_complete) ... ok
+test_pagination_and_search (care.tests.CareFlowTests.test_pagination_and_search) ... ok
+test_photo_required (care.tests.CareFlowTests.test_photo_required) ... ok
+test_private_lists_and_detail (care.tests.CareFlowTests.test_private_lists_and_detail) ... ok
+test_private_photo_access (care.tests.CareFlowTests.test_private_photo_access) ... ok
+test_registration_and_token (care.tests.CareFlowTests.test_registration_and_token) ... ok
+test_rejection_reason_required (care.tests.CareFlowTests.test_rejection_reason_required) ... ok
+test_self_assignment (care.tests.CareFlowTests.test_self_assignment) ... ok
+test_sitter_cannot_edit_plan (care.tests.CareFlowTests.test_sitter_cannot_edit_plan) ... ok
+test_sitter_cannot_extend (care.tests.CareFlowTests.test_sitter_cannot_extend) ... ok
+test_sitter_cannot_resolve (care.tests.CareFlowTests.test_sitter_cannot_resolve) ... ok
+test_sitter_cannot_review (care.tests.CareFlowTests.test_sitter_cannot_review) ... ok
+test_task_due_outside_shift (care.tests.CareFlowTests.test_task_due_outside_shift) ... ok
+test_achievements_can_be_assigned_and_removed (cats.tests.CatAccessTests.test_achievements_can_be_assigned_and_removed) ... ok
+test_guest_cannot_read_cats (cats.tests.CatAccessTests.test_guest_cannot_read_cats) ... ok
+test_invalid_birth_year_does_not_create_cat (cats.tests.CatAccessTests.test_invalid_birth_year_does_not_create_cat) ... ok
+test_other_user_reads_but_cannot_change_or_delete (cats.tests.CatAccessTests.test_other_user_reads_but_cannot_change_or_delete) ... ok
+test_owner_is_taken_from_authentication (cats.tests.CatAccessTests.test_owner_is_taken_from_authentication) ... ok
+
+----------------------------------------------------------------------
+Ran 40 tests in 8.037s
+
+OK
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).

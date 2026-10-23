@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: .env
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+  migrate:
+    build: .
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      DEBUG: "False"
+    command: sh -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput"
+    volumes:
+      - static:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+  backend:
+    build: .
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      DEBUG: "False"
+    volumes:
+      - static:/app/staticfiles
+      - media:/app/media
+      - evidence:/app/private_media
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./infra/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static:/var/html/static:ro
+      - media:/var/html/media:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+volumes:
+  database:
+  static:
+  media:
+  evidence:

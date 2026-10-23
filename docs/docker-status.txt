@@ -1,0 +1,25 @@
+NAME                  IMAGE                 COMMAND                  SERVICE   CREATED         STATUS                     PORTS
+kittygram-backend-1   kittygram-backend     "gunicorn config.wsg…"   backend   4 minutes ago   Up 2 minutes               8000/tcp
+kittygram-db-1        postgres:16-alpine    "docker-entrypoint.s…"   db        6 minutes ago   Up 2 minutes (healthy)     5432/tcp
+kittygram-migrate-1   kittygram-migrate     "sh -c 'python manag…"   migrate   4 minutes ago   Exited (0) 4 minutes ago   
+kittygram-nginx-1     nginx:stable-alpine   "/docker-entrypoint.…"   nginx     6 minutes ago   Up 2 minutes               0.0.0.0:8000->80/tcp, [::]:8000->80/tcp
+Python 3.13.17
+psql (PostgreSQL) 16.15
+backend-1  | [2026-10-23 19:04:28 +0000] [1] [INFO] Handling signal: term
+backend-1  | [2026-10-23 22:04:28 +0300] [14] [INFO] Worker exiting (pid: 14)
+backend-1  | [2026-10-23 22:04:28 +0300] [13] [INFO] Worker exiting (pid: 13)
+backend-1  | [2026-10-23 22:04:28 +0300] [15] [INFO] Worker exiting (pid: 15)
+backend-1  | [2026-10-23 19:04:28 +0000] [1] [INFO] Shutting down: Master
+backend-1  | [2026-10-23 19:05:08 +0000] [1] [INFO] Starting gunicorn 26.2.0
+backend-1  | [2026-10-23 19:05:08 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+backend-1  | [2026-10-23 19:05:08 +0000] [1] [INFO] Using worker: sync
+backend-1  | [2026-10-23 19:05:08 +0000] [7] [INFO] Booting worker with pid: 7
+backend-1  | [2026-10-23 19:05:08 +0000] [8] [INFO] Booting worker with pid: 8
+backend-1  | [2026-10-23 19:05:08 +0000] [9] [INFO] Booting worker with pid: 9
+backend-1  | 172.18.0.2 - - [23/Oct/2026:22:06:33 +0300] "GET /api/docs/ HTTP/1.1" 200 4665 "-" "curl/8.7.1"
+migrate-1  | Operations to perform:
+migrate-1  |   Apply all migrations: admin, auth, authtoken, care, cats, contenttypes, sessions
+migrate-1  | Running migrations:
+migrate-1  |   No migrations to apply.
+migrate-1  | 
+migrate-1  | 1 static file copied to '/app/staticfiles', 156 unmodified.
