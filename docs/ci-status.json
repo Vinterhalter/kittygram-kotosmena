@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/Vinterhalter/kittygram-kotosmena",
+  "workflow": "Project checks",
+  "conclusion": "success",
+  "source_commit": "c0c9ae027d9d456e676d670f388c05c7ea550911",
+  "url": "https://github.com/Vinterhalter/kittygram-kotosmena/actions/runs/40009549951",
+  "checks": [
+    "40 tests on PostgreSQL",
+    "Django system check",
+    "Migrations check",
+    "OpenAPI validation",
+    "Docker Compose config"
+  ]
+}
