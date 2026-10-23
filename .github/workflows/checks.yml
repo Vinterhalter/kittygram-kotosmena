@@ -28,4 +28,6 @@ jobs:
       - run: python backend/manage.py makemigrations --check --dry-run
       - run: python backend/manage.py test care cats --verbosity 2
       - run: python backend/manage.py spectacular --file /tmp/schema.yaml --validate --fail-on-warn
-      - run: docker compose --env-file .env.example config --quiet
+      - run: |
+          cp .env.example .env
+          docker compose config --quiet
